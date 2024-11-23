@@ -154,7 +154,7 @@ int_to_str:
     mov ecx, result + 3
     mov byte [ecx + 1], 10  ; newline
 
-    ; Convert each digit
+    ; Convert each digit 
 digit_loop:
     xor edx, edx
     div ebx
