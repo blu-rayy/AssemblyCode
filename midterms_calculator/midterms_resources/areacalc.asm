@@ -9,15 +9,26 @@ section .data
           db 'Enter Area To Calculate: ', 0
     menu_len equ $ - menu
 
-    width_prompt db 'Enter width: ', 0
-    width_prompt_len equ $ - width_prompt
+    ; rectangle variables print
+    width_rectangle db 'Enter width of Rectangle: ', 0
+    width_rectangle_len equ $ - width_rectangle
 
-    height_prompt db 'Enter height: ', 0
-    height_prompt_len equ $ - height_prompt
+    height_rectangle db 'Enter height of Rectangle: ', 0
+    height_rectangle_len equ $ - height_rectangle
+
+    ; triangle variables print
+    width_triangle db 'Enter base of Triangle: ', 0
+    width_triangle_len equ $ - width_triangle
+
+    height_triangle db 'Enter height of Triangle: ', 0
+    height_triangle_len equ $ - height_triangle
+
+    ; square variable print
+    width_square db 'Enter side of Square: ', 0
+    width_square_len equ $ - width_square
 
     result_msg db 'The Area of the Shape is... ', 0
     result_msg_len equ $ - result_msg
-
 
     newline db 10
     error_msg db 'Invalid input!', 10
@@ -73,14 +84,38 @@ _start:
     je square_area
 
 rectangle_area:
-    call get_dimensions
+    ; get width
+    PRINT width_rectangle, width_rectangle_len
+    READ input, 3
+    call convert_input
+    mov byte [width], al
+
+    ; get height
+    PRINT height_rectangle, height_rectangle_len
+    READ input, 3
+    call convert_input
+    mov byte [height], al
+
+    ; compute
     movzx eax, byte [width]
     movzx ebx, byte [height]
     mul ebx
     jmp display_result
 
 triangle_area:
-    call get_dimensions
+    ; get width/base
+    PRINT width_triangle, width_triangle_len
+    READ input, 3
+    call convert_input
+    mov byte [width], al
+
+    ; get height
+    PRINT height_triangle, height_triangle_len
+    READ input, 3
+    call convert_input
+    mov byte [height], al
+
+    ; compute 
     movzx eax, byte [width]
     movzx ebx, byte [height]
     mul ebx
@@ -88,31 +123,16 @@ triangle_area:
     jmp display_result
 
 square_area:
-    call get_width
-    movzx eax, al
-    mul eax
-    jmp display_result
-
-get_dimensions:
-    ; Get width
-    PRINT width_prompt, width_prompt_len
+    ; get width/side
+    PRINT width_square, width_square_len
     READ input, 3
     call convert_input
     mov byte [width], al
 
-    ; Get height
-    PRINT height_prompt, height_prompt_len
-    READ input, 3
-    call convert_input
-    mov byte [height], al
-    ret
-
-get_width:
-    ; Get width for square
-    PRINT width_prompt, width_prompt_len
-    READ input, 3
-    call convert_input
-    ret
+    ; compute
+    movzx eax, al
+    mul eax
+    jmp display_result
 
 convert_input:
     ; Convert ASCII input to integer
